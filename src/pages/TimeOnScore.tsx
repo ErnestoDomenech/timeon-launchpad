@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2, Clock, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import TimeOnScoreLeadForm from "@/components/TimeOnScoreLeadForm";
 
 type Dimension =
   | "registration"
@@ -438,27 +439,24 @@ const TimeOnScore = () => {
                 <p className="mt-3 text-lg">{dimensionAdvice[result.weakestDimension]}</p>
               </div>
 
-              <div className="mt-8 rounded-2xl border border-border bg-card p-6 shadow-sm md:p-8">
-                <h2 className="text-2xl font-bold">¿Quieres guardar tu diagnóstico?</h2>
-                <p className="mt-2 text-muted-foreground">
-                  En la siguiente versión podrás recibir este resultado por email y pedir que TimeOn
-                  te muestre cómo mejorar las áreas detectadas.
-                </p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                  <Button size="lg" asChild>
-                    <a href="mailto:hola@timeon.es?subject=Quiero revisar mi TimeOn Score">
-                      Quiero revisar mi resultado
-                    </a>
-                  </Button>
-                  <Button size="lg" variant="outline" onClick={restart}>
-                    <RotateCcw className="mr-2 h-4 w-4" />
-                    Repetir diagnóstico
-                  </Button>
-                </div>
+              <div className="mt-8">
+                <TimeOnScoreLeadForm
+                  overallScore={result.overall}
+                  dimensionScores={result.dimensionScores}
+                  weakestDimension={labels[result.weakestDimension]}
+                  teamSize={companySize}
+                  currentSystem={questions[0].options.find((option) => option.score === answers[1])?.label}
+                />
               </div>
 
-              <div className="mt-6 text-center text-sm text-muted-foreground">
-                Tamaño de equipo declarado: {companySize}
+              <div className="mt-6 flex flex-col items-center gap-4 text-center">
+                <Button size="lg" variant="outline" onClick={restart}>
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Repetir diagnóstico
+                </Button>
+                <p className="text-sm text-muted-foreground">
+                  Tamaño de equipo declarado: {companySize}
+                </p>
               </div>
             </section>
           )}
